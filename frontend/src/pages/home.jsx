@@ -169,7 +169,7 @@ const Home = () => {
           className="btn btn-gradient input-group-append shadow"
           type="button"
           onClick={handleSearch}
-          disabled={!searchQuery.trim()} // Button is disabled if input is empty
+          disabled={!searchQuery.trim()}
         >
           <i className="fa fa-search"></i>
         </button>
