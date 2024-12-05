@@ -1,16 +1,19 @@
 import pandas as pd
 import joblib
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor, StackingRegressor
+from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler, PolynomialFeatures
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
+from xgboost import XGBRegressor
 
 class PricePredictionModel:
     def __init__(self, data):
         self.data = data
-        self.model = None
         self.scaler = None
+        self.poly = None
         self.feature_columns = None
+        self.model = None
 
     def preprocess_data(self):
         # Keep only the relevant columns
@@ -19,11 +22,22 @@ class PricePredictionModel:
         # One-hot encode categorical features
         self.data = pd.get_dummies(self.data, columns=['name', 'landOptions'], drop_first=True)
 
-        # Scale numerical features
+        # Rename columns to remove any special characters
+        self.data.columns = self.data.columns.str.replace('[', '', regex=False).str.replace(']', '', regex=False)
+
+        # Scale and polynomial transform the 'area' feature
         self.scaler = StandardScaler()
         self.data[['area']] = self.scaler.fit_transform(self.data[['area']])
+        
+        # Initialize polynomial features
+        self.poly = PolynomialFeatures(degree=2, include_bias=False)
+        area_poly = self.poly.fit_transform(self.data[['area']])
+        
+        # Convert polynomial features to DataFrame and rename columns
+        area_poly_df = pd.DataFrame(area_poly, columns=['area', 'area_squared'], index=self.data.index)
+        self.data = pd.concat([self.data.drop(columns=['area']), area_poly_df], axis=1)
 
-        # Save feature column names
+        # Save feature column names for alignment in prediction
         self.feature_columns = self.data.drop(['price'], axis=1).columns
         joblib.dump(self.feature_columns, 'feature_columns.joblib')
 
@@ -36,8 +50,15 @@ class PricePredictionModel:
     def train_model(self):
         X_train, X_test, y_train, y_test = self.preprocess_data()
 
-        # Train the model
-        self.model = RandomForestRegressor()
+        # Define a stacking model
+        self.model = StackingRegressor(
+            estimators=[
+                ('rf', RandomForestRegressor()),
+                ('gb', GradientBoostingRegressor()),
+                ('xgb', XGBRegressor(objective='reg:squarederror'))
+            ],
+            final_estimator=LinearRegression()
+        )
         self.model.fit(X_train, y_train)
 
         # Evaluate the model
@@ -45,37 +66,32 @@ class PricePredictionModel:
         mse = mean_squared_error(y_test, predictions)
         r2 = r2_score(y_test, predictions)
 
-       # print(f"Model MSE: {mse:.2f}")
-       # print(f"Model R^2: {r2:.2f}")
+        # print(f"Model MSE: {mse:.2f}")
+        # print(f"Model R^2: {r2:.2f}")
 
-        # Debugging the feature importances
-       # feature_importances = self.model.feature_importances_
-       # if len(feature_importances) == len(self.feature_columns):
-        #    print("\nFeature Importances:\n", pd.Series(feature_importances, index=self.feature_columns))
-      #  else:
-         #   print("Feature importance length mismatch.")
-
-        # Save the model and scaler
+        # Save the model, scaler, and polynomial transformer
         joblib.dump(self.model, 'house_price_predictor.joblib')
         joblib.dump(self.scaler, 'scaler_enhanced.joblib')
+        joblib.dump(self.poly, 'poly_features.joblib')
 
     def predict_price(self, features):
-        # Prepare features for prediction
+        # Convert input features into a DataFrame
         features_df = pd.DataFrame([features])
 
-        # One-hot encode the categorical features
+        # One-hot encode categorical features and align with training features
         features_df = pd.get_dummies(features_df, columns=['name', 'landOptions'], drop_first=True)
         features_df = features_df.reindex(columns=self.feature_columns, fill_value=0)
 
-        # Scale 'area' column
-        if 'area' in features_df.columns:
-            features_df[['area']] = self.scaler.transform(features_df[['area']])
+        # Scale and apply polynomial transformation to 'area'
+        features_df[['area']] = self.scaler.transform(features_df[['area']])
+        area_poly = self.poly.transform(features_df[['area']])
+        features_df[['area', 'area_squared']] = area_poly
 
-        # Predict the price
+        # Predict price
         price_pred = self.model.predict(features_df)
         return price_pred[0]
 
-# Load your cleaned dataset
+# Load the cleaned dataset
 data = pd.read_csv('C:/Users/infin/OneDrive/Desktop/Opex_Home_Solutions/AI_ML/cleaned_house_data.csv')
 
 # Train and save the model
@@ -84,9 +100,9 @@ price_model.train_model()
 
 # Predict a sample price
 sample_features = {
-    "name": "Cottage",
-    "area": 1500,
-    "landOptions": "Rural",
+    "name": "Bungalow",
+    "area": 2000,
+    "landOptions": "Suburban",
 }
 predicted_price = price_model.predict_price(sample_features)
-print("", predicted_price)  
+print(predicted_price)
