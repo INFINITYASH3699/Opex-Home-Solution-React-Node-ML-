@@ -12,8 +12,6 @@ Opex Home Solution is a comprehensive web application that showcases house desig
 
 ---
 
----
-
 ## 🛠️ Technologies Used
 ### Frontend
 - **React.js**: For building the user interface.
