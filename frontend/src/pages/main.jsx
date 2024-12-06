@@ -114,7 +114,7 @@ const Main = () => {
                   <button
                     type="submit"
                     className="btn btn-lg btn-outline-warning"
-                    disabled={isLoading} // Disable button while loading
+                    disabled={isLoading}
                   >
                     {isLoading ? "Calculating..." : "Get Price Estimation"}
                   </button>
@@ -149,10 +149,10 @@ const Main = () => {
 
       {/* Offerings Section */}
       <div className="sections col-sm-12 col-md-12 col-lg-12 col-xl-12 p-0">
+        <h1 className="text-center section-txt m-0 gradient-bg">
+          What We Offer
+        </h1>
         <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-          <h1 className="text-center section-txt sec-1 m-0 pt-5">
-            What We Offer
-          </h1>
           <div className="row g-0 col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div className="container-content col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex sec-1">
               <div className="img-box col-sm-6 col-md-6 col-lg-6 col-xl-6 d-flex justify-content-center align-items-center">
@@ -171,11 +171,7 @@ const Main = () => {
                   </p>
                 </div>
                 <div className="btn-box d-flex justify-content-end">
-                  <Link
-                    to="/"
-                    className="text-reset text-decoration-none"
-                    target="_blank"
-                  >
+                  <Link to="/home" className="text-reset text-decoration-none">
                     <button className="btn btn-outline-primary blue-btn">
                       Explore Designs
                     </button>
@@ -195,11 +191,7 @@ const Main = () => {
                   </p>
                 </div>
                 <div className="btn-box d-flex justify-content-end">
-                  <Link
-                    to="/"
-                    className="text-reset text-decoration-none"
-                    target="_blank"
-                  >
+                  <Link to="/home" className="text-reset text-decoration-none">
                     <button className="btn btn-outline-primary blue-btn">
                       Explore Designs
                     </button>
@@ -233,11 +225,7 @@ const Main = () => {
                   </p>
                 </div>
                 <div className="btn-box d-flex justify-content-end">
-                  <Link
-                    to="/"
-                    className="text-reset text-decoration-none"
-                    target="_blank"
-                  >
+                  <Link to="/home" className="text-reset text-decoration-none">
                     <button className="btn btn-outline-primary blue-btn">
                       Explore Designs
                     </button>
@@ -257,11 +245,7 @@ const Main = () => {
                   </p>
                 </div>
                 <div className="btn-box d-flex justify-content-end">
-                  <Link
-                    to="/"
-                    className="text-reset text-decoration-none"
-                    target="_blank"
-                  >
+                  <Link to="/home" className="text-reset text-decoration-none">
                     <button className="btn btn-outline-primary blue-btn">
                       Explore Designs
                     </button>

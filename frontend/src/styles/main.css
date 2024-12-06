@@ -21,7 +21,7 @@
 }
 
 .section-txt {
-  font-size: 3.5em;
+  font-size: 2.5em;
 }
 .title-text {
   font-size: 3.5rem;
@@ -37,16 +37,44 @@ body.light .est-box {
   background-color: white;
 }
 
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, #6a0dad, #c71585, #ff4500, #ff6347);
+  background-size: 200% 200%; /* Double the size to enable smooth animation */
+  animation: gradient-animation 2s ease-in-out infinite;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: sticky;
+  z-index: 1;
+  top: 4.6rem;
+}
+
+body.light .sec-1 {
+  background: linear-gradient(135deg, #c287ec, #ed89c8, #efb49e, #f48c7a);
+}
+
 body.light .sec-2 {
-  background-color: #b7e0ff;
+  background: linear-gradient(135deg, #61d7b6, #7f54aa, #94b769, #b564a1);
 }
 
 body.light .sec-3 {
-  background-color: #ffcfb3;
+  background: linear-gradient(135deg, #d279b0, #54946d, #a96147, #a09a5e);
 }
 
 body.light .sec-4 {
-  background-color: #e78f81;
+  background: linear-gradient(135deg, #bab64e, #6a55ad, #b0bb5d, #bb5f65);
 }
 
 .img-box {
@@ -57,6 +85,7 @@ body.light .sec-4 {
 .img-box img {
   width: 100%;
   height: 100%;
+  border-radius: 2rem;
 }
 
 .content-box {
@@ -73,7 +102,7 @@ body.light .sec-4 {
   margin-top: 5px;
 }
 
-.btn-box button{
+.btn-box button {
   width: 10rem;
   height: 3rem;
 }
@@ -178,7 +207,7 @@ body.dark .hero-sec > * {
   }
 
   .section-txt {
-    font-size: 2.5em;
+    font-size: 1.5em;
   }
 
   .container-content {
@@ -203,11 +232,10 @@ body.dark .hero-sec > * {
     height: 100%;
   }
 
-  .btn-box button{
+  .btn-box button {
     margin: 5px;
     width: 5rem;
     height: 2rem;
     font-size: 8px;
   }
-  
 }
