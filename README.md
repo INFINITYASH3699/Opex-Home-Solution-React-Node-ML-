@@ -126,4 +126,4 @@ This project is licensed under the MIT License.
 For questions or suggestions, feel free to reach out:
 
 Email: opexhomesolutions@gmail.com
-GitHub: [@INFINITYASH](https://github.com/INFINITYASH3699/Opex-Home-Solution-React-Node-ML-)
+GitHub: [@INFINITYASH3699](https://github.com/INFINITYASH3699/Opex-Home-Solution-React-Node-ML-)
